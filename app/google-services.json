@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "429369727639",
+    "project_id": "inganapp-56251",
+    "storage_bucket": "inganapp-56251.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429369727639:android:023612913ef256e5dca7d2",
+        "android_client_info": {
+          "package_name": "com.example.inganapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "429369727639-hg28s7peuclkp6b59q7si5knbsjrmta2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDsGsGSkxmbyqd8oQCiHV6xakAnNofhoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429369727639-hg28s7peuclkp6b59q7si5knbsjrmta2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
