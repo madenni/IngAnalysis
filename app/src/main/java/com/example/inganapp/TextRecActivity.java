@@ -2,13 +2,13 @@ package com.example.inganapp;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,9 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.inganapp.tools.RequestPermissionsTool;
 import com.example.inganapp.tools.RequestPermissionsToolImpl;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -39,18 +41,23 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
 
     private static final String TAG = TextRecActivity.class.getSimpleName();
     static final int PHOTO_REQUEST_CODE = 100;
-    private TessBaseAPI tessBaseApi;
+    private TessBaseAPI tess;
     TextView textView;
     ImageView imageView;
     Uri outputFileUri;
+
     private static final String lang = "rus";
     String result = "empty";
     private int GALLERY = 1, CAMERA = 2;
     private RequestPermissionsTool requestTool; //for API >=23 only
-
+    private boolean tessInit;
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/TesseractSample/";
     private static final String TESSDATA = "tessdata";
     private static final int PERMISSION_STORAGE = 101;
+    private final MutableLiveData<String> resulttext = new MutableLiveData<>();
+
+    private AsyncTask<Void, Void, Void> ocr = new ocrTask();
+    private ProgressDialog progressOcr;
 
 
     @Override
@@ -58,14 +65,23 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_rec);
         imageView = (ImageView)findViewById(R.id.image);
+        Button detectBtn = (Button) findViewById(R.id.detectbtn);
+        detectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TextRecActivity.this, ResultActivity.class));
+            }
+        });
         Button captureImg = (Button) findViewById(R.id.snapbtn);
         if (captureImg != null) {
-            captureImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //startCameraActivity();
-                    showPictureDialog();
-                }
+            captureImg.setOnClickListener(v -> {
+                //startCameraActivity();
+                //showPictureDialog();
+                ImagePicker.with(TextRecActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
             });
         }
         textView = (TextView) findViewById(R.id.text);
@@ -77,105 +93,36 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
         }
     }
 
-    private void showPictureDialog() {
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {"Select photo from gallery", "Capture photo from camera"};
-        pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                choosePhotoFromGallary();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
-                        }
-                    }
-                });
-        pictureDialog.show();
-    }
-    public void choosePhotoFromGallary() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, GALLERY);
-    }
-    private void takePhotoFromCamera() {
-        try {
-            String IMGS_PATH = Environment.getExternalStorageDirectory().toString() + "/TesseractSample/imgs";
-            prepareDirectory(IMGS_PATH);
 
-            String img_path = IMGS_PATH + "/ocr.jpg";
 
-            outputFileUri = Uri.fromFile(new File(img_path));
-
-            //outputFileUri = FileProvider.getUriForFile(
-            //        this,
-              //      "com.example.inganapp.provider", //(use your app signature + ".provider" )
-                //    new File(img_path));
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            //intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            //if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, CAMERA);
-            //}
-        }catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-
-        //startActivityForResult(intent, CAMERA);
-    }
     /**
      * to get high resolution image from camera
      */
 
-    private void startCameraActivity() {
-        try {
-            String IMGS_PATH = Environment.getExternalStorageDirectory().toString() + "/TesseractSample/imgs";
-            prepareDirectory(IMGS_PATH);
 
-            String img_path = IMGS_PATH + "/ocr.jpg";
 
-            outputFileUri = Uri.fromFile(new File(img_path));
 
-            final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, PHOTO_REQUEST_CODE);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        }
-    }
-
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent data) {
-        //making photo
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PHOTO_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            doOCR();
-        } else {
-            Toast.makeText(this, "ERROR: Image was not obtained.", Toast.LENGTH_SHORT).show();
-        }
-    }*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        /*if (requestCode == CAMERA) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (PermissionUtils.hasPermissions(this)) {
-                    Toast.makeText(getApplicationContext(), "Разрешение предоставлено", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Разрешение не предоставлено", Toast.LENGTH_SHORT).show();
+        super.onActivityResult(requestCode, resultCode, data);
+        if (/*requestCode == CAMERA &&*/ resultCode == Activity.RESULT_OK) {
+            if (data!=null){
+                outputFileUri = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), outputFileUri);
+                    imageView.setImageBitmap(bitmap);
+                    doOCR();
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        }*/
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            //Bitmap photo = (Bitmap) data.getExtras().get("data");
             // Set the image in imageview for display
-            imageView.setImageBitmap(photo);
+            //imageView.setImageBitmap(photo);
             //doOCR();
         } else {
             Toast.makeText(this, "ERROR: Image was not obtained.", Toast.LENGTH_SHORT).show();
@@ -184,7 +131,8 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
 
     private void doOCR() {
         prepareTesseract();
-        startOCR(outputFileUri);
+
+        ocr.execute();
     }
 
     /**
@@ -261,51 +209,55 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
      *
      * @param imgUri
      */
-    private void startOCR(Uri imgUri) {
+    private String startOCR(Uri imgUri) {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4; // 1 - means max size. 4 - means maxsize/4 size. Don't use value <4, because you need more memory in the heap to store your data.
             Bitmap bitmap = BitmapFactory.decodeFile(imgUri.getPath(), options);
+            //result = extractText(bitmap);
+            File result1 = new File(imgUri.getPath());
+            result = extractText(result1);
+                //resulttext.postValue(result);
 
-            result = extractText(bitmap);
-
-            textView.setText(result);
+            //textView.setText(result);
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+        return result;
     }
 
 
-    private String extractText(Bitmap bitmap) {
+    private String extractText(File file) {
         try {
-            tessBaseApi = new TessBaseAPI();
+            tess = new TessBaseAPI();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            if (tessBaseApi == null) {
+            if (tess == null) {
                 Log.e(TAG, "TessBaseAPI is null. TessFactory not returning tess object.");
             }
         }
+        tess.init(DATA_PATH, lang, TessBaseAPI.OEM_LSTM_ONLY);
 
-        tessBaseApi.init(DATA_PATH, lang);
 
 //       //EXTRA SETTINGS
 //        //For example if we only want to detect numbers
-//        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890");
+        //tess.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "1234567890АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя,.() ");
 //
 //        //blackList Example
 //        tessBaseApi.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "!@#$%^&*()_+=-qwertyuiop[]}{POIU" +
 //                "YTRWQasdASDfghFGHjklJKLl;L:'\"\\|~`xcvXCVbnmBNM,./<>?");
 
         Log.d(TAG, "Training file loaded");
-        tessBaseApi.setImage(bitmap);
+        tess.setImage(file);
         String extractedText = "empty result";
         try {
-            extractedText = tessBaseApi.getUTF8Text();
+            tess.getHOCRText(0);
+            extractedText = tess.getUTF8Text();
         } catch (Exception e) {
             Log.e(TAG, "Error in recognizing text.");
         }
-        tessBaseApi.end();
+        tess.recycle();
         return extractedText;
     }
 
@@ -326,23 +278,34 @@ public class TextRecActivity extends AppCompatActivity implements ActivityCompat
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    private class ocrTask extends AsyncTask<Void, Void, Void> {
 
-        boolean grantedAllPermissions = true;
-        for (int grantResult : grantResults) {
-            if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                grantedAllPermissions = false;
-            }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
-        if ((grantResults.length != permissions.length) || (!grantedAllPermissions)) {
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            //progressOcr.cancel();
+            Intent intent = new Intent(TextRecActivity.this, ResultActivity.class);
 
-            requestTool.onPermissionDenied();
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            intent.putExtra("result", result);
+            intent.putExtra("picture", outputFileUri.toString());
+
+            startActivity(intent);
+            finish();
+
+            //textView.setText(result);
         }
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.i("OCRTask", "extracting..");
+            result = startOCR(outputFileUri);
+            return null;
+        }
     }
-}*/
+
 }
