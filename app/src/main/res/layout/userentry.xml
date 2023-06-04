@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:layout_marginBottom="50dp"
-    android:backgroundTint="#FFC61A"
+    android:layout_margin="8dp"
+    android:layout_marginBottom="10dp"
+    android:backgroundTint="@color/yellow_500"
     android:visibility="visible"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -27,11 +27,11 @@
             <TextView
                 android:id="@+id/textname"
                 style="bold"
-                android:layout_width="215dp"
+                android:layout_width="265dp"
                 android:layout_height="wrap_content"
                 android:text="привет всем кто только проснулся"
                 android:textColor="#FFFFFF"
-                android:textSize="24dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -48,10 +48,12 @@
             <ImageView
                 android:id="@+id/imageView"
 
-                android:layout_width="35dp"
+                android:layout_width="57dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="80dp"
-                android:visibility="invisible"
+                android:layout_gravity="end"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="20dp"
+                android:visibility="visible"
                 app:srcCompat="?android:attr/alertDialogIcon" />
 
             <TextView
@@ -60,7 +62,7 @@
                 android:layout_height="36dp"
                 android:layout_weight="1"
                 android:text="TextView"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </LinearLayout>
 
 

@@ -1,11 +1,5 @@
 package com.example.inganapp;
 
-import static android.icu.text.ListFormatter.Type.AND;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -13,12 +7,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Userlist extends AppCompatActivity implements RecyclerViewInterface{
     RecyclerView recyclerView;
@@ -118,5 +113,12 @@ public class Userlist extends AppCompatActivity implements RecyclerViewInterface
 
         //calling a method of the adapter class and passing the filtered list
         adapter.filterList(filterdNames,filterdIDs, filterdWRNS);
+    }
+    @Override
+    public void onBackPressed() {
+
+        startActivity(new Intent(Userlist.this,MainActivity.class));
+        finish();
+
     }
 }

@@ -39,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
     //DBHelper DB;
     private static final String lang = "rus";
     String result = "empty";
-    private int GALLERY = 1, CAMERA = 2;
+    //private int GALLERY = 1, CAMERA = 2;
     private RequestPermissionsTool requestTool; //for API >=23 only
-    private boolean tessInit;
+    //private boolean tessInit;
     private static final String DATA_PATH = Environment.getExternalStorageDirectory().toString() + "/TesseractSample/";
     private static final String TESSDATA = "tessdata";
     private static final int PERMISSION_STORAGE = 101;
     private final MutableLiveData<String> resulttext = new MutableLiveData<>();
     private static final String TAG = MainActivity.class.getSimpleName();
-    static final int PHOTO_REQUEST_CODE = 100;
+    //static final int PHOTO_REQUEST_CODE = 100;
     private TessBaseAPI tess;
     Uri outputFileUri;
 
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Userlist.class));
+                finish();
             }
         });
         rec.setOnClickListener(new View.OnClickListener() {

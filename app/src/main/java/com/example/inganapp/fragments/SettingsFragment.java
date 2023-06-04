@@ -13,6 +13,9 @@ import com.example.inganapp.R;
 
 
 public class SettingsFragment extends Fragment {
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -96,4 +96,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="373dp"
+        android:layout_height="258dp"
+        android:fontFamily="sans-serif"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.315" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

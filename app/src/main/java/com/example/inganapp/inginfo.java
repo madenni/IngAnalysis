@@ -1,14 +1,14 @@
 package com.example.inganapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.database.sqlite.SQLiteDatabase;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class inginfo extends AppCompatActivity {
-    TextView nameBox, dia, vgt, vgn, alg, adtv;
+    TextView nameBox, dia, vgt, vgn, alg, adtv, descr;
     DBHelper DB;
     MyAdapter adapter;
     Cursor cursor;
@@ -27,6 +27,7 @@ public class inginfo extends AppCompatActivity {
         vgn = findViewById(R.id.nonvegan);
         alg = findViewById(R.id.allergy);
         adtv = findViewById(R.id.additives);
+        descr = findViewById(R.id.textView2);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -39,6 +40,7 @@ public class inginfo extends AppCompatActivity {
                 DB.COLUMN_ID + "=?", new String[]{userId});
         cursor.moveToFirst();
         nameBox.setText(cursor.getString(1));
+        descr.setText(cursor.getString(2));
         if (cursor.getInt(3) == 1 ){
             dia.setText("осторожно при диабете");
             dia.setBackgroundResource(R.color.red);

@@ -1,44 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultActivity">
-
-    <com.google.android.material.tabs.TabLayout
+    tools:context=".ResultActivity"
+    >
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/black_shade_1"
-        app:tabTextColor="@color/white"
-        app:tabIndicatorColor="@color/white"
-        android:id="@+id/tab_layout">
-
-
-        <com.google.android.material.tabs.TabItem
+        android:layout_height="wrap_content">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Home"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TEXT"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="IMAGE"/>
-
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
+            android:backgroundTint="@color/yellow_500"
+            app:tabTextColor="@color/black_shade_1"
+            app:tabIndicatorColor="@color/black_shade_1"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_pager"
-        android:background="@color/yellow_200"
-        android:layout_below="@id/tab_layout"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
-
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

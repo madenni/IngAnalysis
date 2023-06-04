@@ -2,9 +2,9 @@
     <string name="app_name">IngAnApp</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_result">ResultActivity</string>
-    <string name="Home">Tab 1</string>
-    <string name="Notification">Tab 2</string>
-    <string name="Settings">Tab 3</string>
+    <string name="tab_text_1">HOME</string>
+    <string name="tab_text_2">TEXT</string>
+    <string name="tab_text_3">IMAGE</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
