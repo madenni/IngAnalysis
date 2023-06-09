@@ -9,13 +9,14 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.inganapp.fragments.HomeFragment;
-import com.example.inganapp.fragments.NotificationFragment;
+import com.example.inganapp.fragments.AnalysisFragment;
+import com.example.inganapp.fragments.TextResultFragment;
 import com.google.android.material.tabs.TabLayout;
 public class ResultActivity extends AppCompatActivity
-        implements NotificationFragment.SendMessage {
+        implements TextResultFragment.SendMessage {
     String result, picture;
     ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +33,11 @@ public class ResultActivity extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
     }
     @Override public void sendData(String message) {
         String tag = "android:switcher:" + R.id.view_pager + ":" + 0;
-        HomeFragment f = (HomeFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        AnalysisFragment f = (AnalysisFragment) getSupportFragmentManager().findFragmentByTag(tag);
         f.displayReceivedData(message);
         View view = this.getCurrentFocus();
         if (view != null) {

@@ -1,0 +1,402 @@
+@startuml
+class com.example.inganapp.MainActivity {
+~ Button view
+- {static} String lang
+~ String result
+- RequestPermissionsTool requestTool
+- {static} String DATA_PATH
+- {static} String TESSDATA
+- {static} int PERMISSION_STORAGE
+- MutableLiveData<String> resulttext
+- {static} String TAG
+- TessBaseAPI tess
+~ Uri outputFileUri
+- AsyncTask<Void,Void,Void> ocr
+- ProgressBar progressOcr
+# void onCreate(Bundle)
+# void onActivityResult(int,int,Intent)
+- void doOCR()
+- void prepareDirectory(String)
+- void prepareTesseract()
+- void copyTessDataFiles(String)
+- String startOCR(Uri)
+- String extractText(File)
+- void requestPermissions()
++ void onRequestPermissionsResult(int,String[],int[])
+}
+class com.example.inganapp.MainActivity$ocrTask {
+# void onPreExecute()
+# void onPostExecute(Void)
+# Void doInBackground(Void)
+}
+class com.example.inganapp.databinding.FragmentMyIngredBinding {
+- ConstraintLayout rootView
++ RecyclerView recyclerview
++ TextView textView
++ ConstraintLayout getRoot()
++ {static} FragmentMyIngredBinding inflate(LayoutInflater)
++ {static} FragmentMyIngredBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} FragmentMyIngredBinding bind(View)
+}
+class com.example.inganapp.PermissionUtils {
++ {static} boolean hasPermissions(Context)
++ {static} void requestPermissions(Activity,int)
+}
+class com.example.inganapp.InginfoActivity {
+~ TextView nameBox
+~ DBHelper DB
+~ MyAdapter adapter
+~ Cursor cursor
+~ SQLiteDatabase sql
+~ String userId
+# void onCreate(Bundle)
+}
+class com.example.inganapp.fragments.TextResultFragment {
+~ SendMessage SM
+~ ConstraintLayout layout
++ {static} NotificationFragment newInstance()
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onViewCreated(View,Bundle)
++ void onAttach(Context)
+}
+interface com.example.inganapp.fragments.TextResultFragment$SendMessage {
+~ void sendData(String)
+}
+class com.example.inganapp.fragments.HabitsFragment {
+~ int userID
+~ TextView nameBox
+~ CheckBox dia
+~ DBHelper DB
+~ MyAdapter adapter
+~ Cursor cursor
+~ SQLiteDatabase sql
+~ ImageButton save
+~ Button del
++ {static} HabitsFragment newInstance()
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onViewCreated(View,Bundle)
++ void onResume()
+- AlertDialog AskOption()
+}
+class com.example.inganapp.databinding.ActivityUserlistBinding {
+- ConstraintLayout rootView
++ EditText filter
++ RecyclerView recyclerview
++ ConstraintLayout getRoot()
++ {static} ActivityUserlistBinding inflate(LayoutInflater)
++ {static} ActivityUserlistBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} ActivityUserlistBinding bind(View)
+}
+class com.example.inganapp.UserViewPagerAdapter {
+- {static} int[] TAB_TITLES
+- Context mContext
+- int user
++ Fragment getItem(int)
++ CharSequence getPageTitle(int)
++ int getCount()
+}
+class com.example.inganapp.databinding.FragmentAnalysisBinding {
+- ConstraintLayout rootView
++ RecyclerView recyclerview
++ TextView textViewName
++ ConstraintLayout getRoot()
++ {static} FragmentAnalysisBinding inflate(LayoutInflater)
++ {static} FragmentAnalysisBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} FragmentAnalysisBinding bind(View)
+}
+class com.example.inganapp.databinding.ActivityInginfoBinding {
+- ConstraintLayout rootView
++ TextView additives
++ TextView allergy
++ TextView diabetes
++ TextView nonvegan
++ TextView nonveget
++ TextView textView
++ TextView textView2
++ ConstraintLayout getRoot()
++ {static} ActivityInginfoBinding inflate(LayoutInflater)
++ {static} ActivityInginfoBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} ActivityInginfoBinding bind(View)
+}
+class com.example.inganapp.fragments.SettingsFragment {
++ {static} SettingsFragment newInstance()
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class com.example.inganapp.databinding.FragmentSettingsBinding {
+- RelativeLayout rootView
++ ImageView image
++ RelativeLayout getRoot()
++ {static} FragmentSettingsBinding inflate(LayoutInflater)
++ {static} FragmentSettingsBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} FragmentSettingsBinding bind(View)
+}
+class com.example.inganapp.databinding.ActivityMainBinding {
+- RelativeLayout rootView
++ Button btnRec
++ Button btnView
++ Button button2
++ ProgressBar progressBar
++ RelativeLayout getRoot()
++ {static} ActivityMainBinding inflate(LayoutInflater)
++ {static} ActivityMainBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} ActivityMainBinding bind(View)
+}
+interface com.example.inganapp.tools.RequestPermissionsTool {
+~ void requestPermissions(Activity,String[])
+~ boolean isPermissionsGranted(Context,String[])
+~ void onPermissionDenied()
+}
+class com.example.inganapp.MyViewPagerAdapter {
+- {static} int[] TAB_TITLES
+- Context mContext
+- String result
++ Fragment getItem(int)
++ CharSequence getPageTitle(int)
++ int getCount()
+}
+interface com.example.inganapp.RecyclerViewInterface {
+~ void OnItemClick(int)
+}
+class com.example.inganapp.fragments.MyIngredFragment {
+~ int userID
+~ ArrayList<String> name
+~ ArrayList<String> id
+~ ArrayList<String> infos
+~ ArrayList<String> wrn
+~ RecyclerView recyclerView
+~ DBHelper DB
+~ MyAdapter adapter
++ {static} MyIngredFragment newInstance()
++ void onCreate(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onViewCreated(View,Bundle)
++ void onResume()
+- void displaydata(int)
++ void OnItemClick(int)
+}
+class com.example.inganapp.fragments.AnalysisFragment {
+~ RecyclerView recyclerView
+~ ArrayList<String> name
+~ ArrayList<String> id
+~ ArrayList<String> infos
+~ ArrayList<String> wrn
+~ ArrayList<String> processedArr
+~ DBHelper DB
+~ MyAdapter adapter
+~ EditText filter
+~ String strtext
+- TextView txtName
++ {static} AnalysisFragment newInstance()
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onViewCreated(View,Bundle)
++ void displayReceivedData(String)
++ void onResume()
+- void displaydata()
++ void OnItemClick(int)
+}
+class com.example.inganapp.ResultActivity {
+~ String result
+~ ViewPager viewPager
+# void onCreate(Bundle)
++ void sendData(String)
++ void onBackPressed()
+}
+class com.example.inganapp.UserActivity {
+~ int user
+~ ViewPager viewPager
+# void onCreate(Bundle)
++ void onBackPressed()
+}
+class com.example.inganapp.databinding.ActivityResultBinding {
+- CoordinatorLayout rootView
++ TabLayout tabs
++ ViewPager viewPager
++ CoordinatorLayout getRoot()
++ {static} ActivityResultBinding inflate(LayoutInflater)
++ {static} ActivityResultBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} ActivityResultBinding bind(View)
+}
+class com.example.inganapp.databinding.NavHeaderMainBinding {
+- LinearLayoutCompat rootView
++ LinearLayoutCompat getRoot()
++ {static} NavHeaderMainBinding inflate(LayoutInflater)
++ {static} NavHeaderMainBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} NavHeaderMainBinding bind(View)
+}
+class com.example.inganapp.tools.RequestPermissionsToolImpl {
+- {static} String CONFIRMATION_DIALOG
+- {static} String TAG
+- Activity activity
++ void requestPermissions(Activity,String[])
++ boolean isPermissionsGranted(Context,String[])
++ void onPermissionDenied()
+- boolean isPermissionGranted(Context,String)
+}
+class com.example.inganapp.tools.RequestPermissionsToolImpl$ConfirmationDialog {
+- {static} String ARG_PERMISSION
+- {static} String ARG_REQUEST_CODE
++ {static} ConfirmationDialog newInstance(int,String)
++ Dialog onCreateDialog(Bundle)
+}
+class com.example.inganapp.tools.RequestPermissionsToolImpl$ErrorDialog {
+- {static} String ARG_MESSAGE
++ {static} ErrorDialog newInstance(String)
++ Dialog onCreateDialog(Bundle)
+}
+class com.example.inganapp.BuildConfig {
++ {static} boolean DEBUG
++ {static} String APPLICATION_ID
++ {static} String BUILD_TYPE
++ {static} int VERSION_CODE
++ {static} String VERSION_NAME
+}
+class com.example.inganapp.databinding.FragmentNotificationBinding {
+- ConstraintLayout rootView
++ ConstraintLayout layoutFR
++ Button passdata
++ TextInputLayout textInputLayout
++ TextInputEditText textInputTextName
++ TextView textViewResult
++ ConstraintLayout getRoot()
++ {static} FragmentNotificationBinding inflate(LayoutInflater)
++ {static} FragmentNotificationBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} FragmentNotificationBinding bind(View)
+}
+class com.example.inganapp.IngredlistActivity {
+~ RecyclerView recyclerView
+~ ArrayList<String> name
+~ ArrayList<String> id
+~ ArrayList<String> infos
+~ ArrayList<String> wrn
+~ DBHelper DB
+~ MyAdapter adapter
+~ EditText filter
+# void onCreate(Bundle)
++ void onResume()
+- void displaydata()
++ void OnItemClick(int)
+- void filterM(String)
++ void onBackPressed()
+}
+class com.example.inganapp.databinding.FragmentHabitsBinding {
+- ConstraintLayout rootView
++ CheckBox CHadditives
++ CheckBox CHallergy
++ CheckBox CHdiabetes
++ CheckBox CHvegan
++ CheckBox CHveget
++ Button del
++ TextView descr
++ ImageButton imageButton
++ TextView nameBox
++ ConstraintLayout relativeLayout
++ TextView textView3
++ ConstraintLayout getRoot()
++ {static} FragmentHabitsBinding inflate(LayoutInflater)
++ {static} FragmentHabitsBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} FragmentHabitsBinding bind(View)
+}
+class com.example.inganapp.databinding.ActivityUserBinding {
+- LinearLayout rootView
++ TextView imya
++ TabLayout tabs
++ Toolbar toolbar
++ ViewPager viewPager
++ LinearLayout getRoot()
++ {static} ActivityUserBinding inflate(LayoutInflater)
++ {static} ActivityUserBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} ActivityUserBinding bind(View)
+}
+class com.example.inganapp.databinding.UserentryBinding {
+- CardView rootView
++ ImageView imageView
++ TextView textid
++ TextView textname
++ TextView u
++ CardView getRoot()
++ {static} UserentryBinding inflate(LayoutInflater)
++ {static} UserentryBinding inflate(LayoutInflater,ViewGroup,boolean)
++ {static} UserentryBinding bind(View)
+}
+class com.example.inganapp.MyAdapter {
+- Context context
+- ArrayList name_id
+- RecyclerViewInterface recyclerViewInterface
++ MyViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(MyViewHolder,int)
++ int getItemCount()
++ ArrayList getId_id()
++ void onClick(View)
++ void filterList(ArrayList<String>,ArrayList<String>,ArrayList<String>)
+}
+class com.example.inganapp.MyAdapter$MyViewHolder {
+~ TextView name_id
+~ ImageView wrn
+}
+class com.example.inganapp.ExampleInstrumentedTest {
++ void useAppContext()
+}
+class com.example.inganapp.DBHelper {
+- Context context
+- {static} String DB_PATH
+- {static} String DB_NAME
+~ {static} String TABLE
+~ {static} String COLUMN_ID
+~ {static} String COLUMN_NAME
+~ {static} String COLUMN_SYN
++ void onCreate(SQLiteDatabase)
++ void onUpgrade(SQLiteDatabase,int,int)
++ void create_db()
++ SQLiteDatabase open()
++ Cursor getdata()
++ Cursor getdata2(String)
++ Cursor getdata3(int)
+}
+class com.example.inganapp.ExampleUnitTest {
++ void addition_isCorrect()
+}
+
+
+androidx.appcompat.app.AppCompatActivity <|-- com.example.inganapp.MainActivity
+com.example.inganapp.MainActivity +.. com.example.inganapp.MainActivity$ocrTask
+com.example.inganapp.AsyncTask <|-- com.example.inganapp.MainActivity$ocrTask
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.FragmentMyIngredBinding
+androidx.appcompat.app.AppCompatActivity <|-- com.example.inganapp.InginfoActivity
+androidx.fragment.app.Fragment <|-- com.example.inganapp.fragments.TextResultFragment
+com.example.inganapp.fragments.TextResultFragment +.. com.example.inganapp.fragments.TextResultFragment$SendMessage
+androidx.fragment.app.Fragment <|-- com.example.inganapp.fragments.HabitsFragment
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.ActivityUserlistBinding
+androidx.fragment.app.FragmentPagerAdapter <|-- com.example.inganapp.UserViewPagerAdapter
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.FragmentAnalysisBinding
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.ActivityInginfoBinding
+androidx.fragment.app.Fragment <|-- com.example.inganapp.fragments.SettingsFragment
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.FragmentSettingsBinding
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.ActivityMainBinding
+androidx.fragment.app.FragmentPagerAdapter <|-- com.example.inganapp.MyViewPagerAdapter
+com.example.inganapp.RecyclerViewInterface <|.. com.example.inganapp.fragments.MyIngredFragment
+androidx.fragment.app.Fragment <|-- com.example.inganapp.fragments.MyIngredFragment
+com.example.inganapp.RecyclerViewInterface <|.. com.example.inganapp.fragments.AnalysisFragment
+androidx.fragment.app.Fragment <|-- com.example.inganapp.fragments.AnalysisFragment
+com.example.inganapp.SendMessage <|.. com.example.inganapp.ResultActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.inganapp.ResultActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.inganapp.UserActivity
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.ActivityResultBinding
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.NavHeaderMainBinding
+com.example.inganapp.tools.RequestPermissionsTool <|.. com.example.inganapp.tools.RequestPermissionsToolImpl
+com.example.inganapp.tools.RequestPermissionsToolImpl +.. com.example.inganapp.tools.RequestPermissionsToolImpl$ConfirmationDialog
+com.example.inganapp.tools.DialogFragment <|-- com.example.inganapp.tools.RequestPermissionsToolImpl$ConfirmationDialog
+com.example.inganapp.tools.RequestPermissionsToolImpl +.. com.example.inganapp.tools.RequestPermissionsToolImpl$ErrorDialog
+com.example.inganapp.tools.DialogFragment <|-- com.example.inganapp.tools.RequestPermissionsToolImpl$ErrorDialog
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.FragmentNotificationBinding
+com.example.inganapp.RecyclerViewInterface <|.. com.example.inganapp.IngredlistActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.example.inganapp.IngredlistActivity
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.FragmentHabitsBinding
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.ActivityUserBinding
+androidx.viewbinding.ViewBinding <|.. com.example.inganapp.databinding.UserentryBinding
+com.example.inganapp.OnClickListener <|.. com.example.inganapp.MyAdapter
+com.example.inganapp.Adapter <|-- com.example.inganapp.MyAdapter
+com.example.inganapp.MyAdapter +.. com.example.inganapp.MyAdapter$MyViewHolder
+com.example.inganapp.ViewHolder <|-- com.example.inganapp.MyAdapter$MyViewHolder
+android.database.sqlite.SQLiteOpenHelper <|-- com.example.inganapp.DBHelper
+@enduml

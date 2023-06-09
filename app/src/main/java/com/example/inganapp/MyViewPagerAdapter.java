@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.inganapp.fragments.HomeFragment;
-import com.example.inganapp.fragments.NotificationFragment;
+import com.example.inganapp.fragments.AnalysisFragment;
+import com.example.inganapp.fragments.TextResultFragment;
 import com.example.inganapp.fragments.SettingsFragment;
 
 /**
@@ -37,12 +37,12 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         switch (position) {
             case 0:
-                fragment = HomeFragment.newInstance();
+                fragment = AnalysisFragment.newInstance();
                 fragment.setArguments(bundle);
 
                 break;
             case 1:
-                fragment = NotificationFragment.newInstance();
+                fragment = TextResultFragment.newInstance();
                 fragment.setArguments(bundle);
                 break;
             case 2:
@@ -50,7 +50,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
                 fragment.setArguments(bundle);
                 break;
             default:
-                fragment = HomeFragment.newInstance();
+                fragment = AnalysisFragment.newInstance();
                 fragment.setArguments(bundle);
                 break;
         }

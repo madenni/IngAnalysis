@@ -83,4 +83,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+    public Cursor getdata3(int a) {
+        SQLiteDatabase DB = this.open();
+        Cursor cursor = null;
+        cursor = DB.rawQuery("SELECT Ingredients.*\n" +
+                "FROM Custom, Ingredients\n" +
+                "WHERE Custom.idU = ? AND Custom.idI = Ingredients._id", new String[]{String.valueOf(a)});
+
+        return cursor;
+    }
 }
