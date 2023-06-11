@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button view, rec, button2;
@@ -498,9 +500,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onPostExecute(aVoid);
             //progressOcr.cancel();
             progressOcr.setVisibility(View.INVISIBLE);
+            String r = result.replaceAll("[\\n]+"," ");
+            Matcher matcher = Pattern.compile("(Состав:)(.*?)(\\.)").matcher(r);
+            matcher.find();
+
             Intent intent = new Intent(MainActivity.this, ResultActivity.class);
 
-            intent.putExtra("result", result);
+            intent.putExtra("result", matcher.group());
             intent.putExtra("picture", outputFileUri.toString());
             intent.putExtra("user", Integer.parseInt(idS));
 

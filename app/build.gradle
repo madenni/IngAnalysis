@@ -53,6 +53,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'cz.adaptech.tesseract4android:tesseract4android:4.3.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation 'org.apache.commons:commons-text:1.9'
 
 
 

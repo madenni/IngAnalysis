@@ -22,9 +22,13 @@ import com.example.inganapp.MyAdapter;
 import com.example.inganapp.R;
 import com.example.inganapp.RecyclerViewInterface;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnalysisFragment extends Fragment implements RecyclerViewInterface{
     RecyclerView recyclerView;
@@ -68,8 +72,14 @@ public class AnalysisFragment extends Fragment implements RecyclerViewInterface{
 
         userID = getArguments().getInt("user");
         strtext = getArguments().getString("result");
-        String pattern = "(,* *[А-яЁё –—-]+[\\s]*\\()|(\\),)|(,*[\\s]*[А-яёЁ ]+[\\s]*[-|–|—][\\s])|(,*[\\s]*[А-яЁё ]+[\\s]*\\:)";
+        String pattern = "(,* *[А-яЁё –—-]+[\\s]*\\()|(\\),)|(,*[\\s]*[А-яёЁ ]+[\\s]*[-|–|—][\\s])|(,*[\\s]*[А-яЁё ]+[\\s]*\\:)|[.]";
         String proc_string = strtext.replaceAll(pattern, ", ").toLowerCase();
+        System.out.println("proc string 0 : " + strtext);
+
+        System.out.println("proc string 1 : " + proc_string);
+        //String proc_string2 = StringUtils.chop(proc_string);
+        //System.out.println("proc string 2 : " + proc_string2);
+
 
         String[] elements = proc_string.trim().split("\\s*,\\s*");
         List<String> fixedLenghtList = Arrays.asList(elements);
@@ -87,11 +97,14 @@ public class AnalysisFragment extends Fragment implements RecyclerViewInterface{
     }
     public void displayReceivedData(String message)
     {
-
-        String pattern = "(,* *[А-яЁё –—-]+[\\s]*\\()|(\\),)|(,*[\\s]*[А-яёЁ ]+[\\s]*[-|–|—][\\s])|(,*[\\s]*[А-яЁё ]+[\\s]*\\:)";
+        System.out.println("proc string 0 : " + message);
+        String pattern = "(,* *[А-яЁё –—-]+[\\s]*\\()|(\\),)|(,*[\\s]*[А-яёЁ ]+[\\s]*[-|–|—][\\s])|(,*[\\s]*[А-яЁё ]+[\\s]*\\:)|[.]";
         String proc_string = message.replaceAll(pattern, ", ").toLowerCase();
+        System.out.println("proc string 1 : " + proc_string);
+        String proc_string2 = StringUtils.chop(proc_string);
+        System.out.println("proc string 2 : " + proc_string2);
 
-        String[] elements = proc_string.trim().split("\\s*,\\s*");
+        String[] elements = proc_string2.trim().split("\\s*,\\s*");
         List<String> fixedLenghtList = Arrays.asList(elements);
         processedArr = new ArrayList<String>(fixedLenghtList);
         System.out.println("list from comma separated String : " + processedArr);
@@ -150,7 +163,15 @@ public class AnalysisFragment extends Fragment implements RecyclerViewInterface{
 
 
     private void displaydata() {
+        ArrayList<String> spaces = new ArrayList<String>();
+        // добавим в список ряд элементов
+        spaces.add(" ");
+        spaces.add("");
+        processedArr.removeAll(spaces);
+
+        System.out.println("processed array : " + processedArr);
         for (int i = 0; i< processedArr.size(); i++){
+            processedArr.get(i).replace(".", "");
             Cursor cursor = DB.getdata2(processedArr.get(i));
             //cursor.moveToFirst();
             while (cursor.moveToNext()){
@@ -159,12 +180,39 @@ public class AnalysisFragment extends Fragment implements RecyclerViewInterface{
 
             }
         }
+        System.out.println("list name with duplicates : " + name);
+        Set<String> idlistWithoutDuplicates = new LinkedHashSet<String>(id);
+        id.clear();
+        id.addAll(idlistWithoutDuplicates);
+        System.out.println("list id without duplicates : " + id);
+
+        Set<String> namelistWithoutDuplicates = new LinkedHashSet<String>(name);
+        name.clear();
+        name.addAll(namelistWithoutDuplicates);
+        System.out.println("list name without duplicates : " + name);
+
+        //Set<String> wrnlistWithoutDuplicates = new LinkedHashSet<String>(wrn);
+        //wrn.clear();
+        //wrn.addAll(wrnlistWithoutDuplicates);
+        //System.out.println("list wrn without duplicates : " + wrn);
         for (int j=0; j< id.size(); j++){
             if (idWRN.contains(id.get(j))){
                 wrn.add(j,"1");
             } else {wrn.add(j,"0");}
 
         }
+        /*Set<String> idH = new LinkedHashSet<>();
+        Set<String> nameH = new LinkedHashSet<>();
+        Set<String> wrnH = new LinkedHashSet<>();
+        idH.addAll(id);
+        nameH.addAll(name);
+        wrnH.addAll(wrn);
+        id.clear();
+        id.addAll(idH);
+        name.clear();
+        name.addAll(nameH);
+        wrn.clear();
+        wrn.addAll(wrnH);*/
         txtName.setText("Найдено " + id.size() + " ингредиентов");
         System.out.println(userID);
     }

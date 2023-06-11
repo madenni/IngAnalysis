@@ -79,9 +79,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getdata2(String a) {
         SQLiteDatabase DB = this.open();
         Cursor cursor = null;
-        cursor = DB.rawQuery("select * from " + TABLE + " where " +
-                COLUMN_NAME + " like ?", new String[]{a});
-
+        cursor = DB.rawQuery("select Ingredients.* from " + TABLE + " where Synonyms like " +"'%" + a + "%'", null);
+        System.out.println("ingredient name: " + a);
         return cursor;
     }
     public Cursor getdata3(int a) {
