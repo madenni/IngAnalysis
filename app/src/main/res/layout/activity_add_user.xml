@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddUserActivity">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/yellow_500"
+        android:text="Здравствуйте!\n\nДавайте познакомимся.\n Расскажите немного о себе!"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textDirection="ltr"
+        android:textIsSelectable="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/green"
+        android:ems="10"
+        android:hint="Введите Ваше имя"
+        android:inputType="textPersonName"
+        android:textSelectHandle="@color/green"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.003"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:cursorVisible="true"
+        android:text=""
+        />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Отметьте справедливые для Вас опции "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+    <CheckBox
+        android:id="@+id/CHdiabetes"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="264dp"
+        android:buttonTint="@color/yellow"
+        android:text="Диабет"
+        android:textColor="#606267"
+        android:textSize="20sp"
+        app:checkedState="unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.244"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/CHallergy"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:buttonTint="@color/yellow"
+        android:text="Склонность к аллергиям"
+        android:textSize="20sp"
+        android:textColor="#606267"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHdiabetes" />
+
+    <CheckBox
+        android:id="@+id/CHveget"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:buttonTint="@color/yellow"
+        android:text="Вегетарианство"
+        android:textSize="20sp"
+        android:textColor="#606267"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHallergy" />
+
+    <CheckBox
+        android:id="@+id/CHvegan"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:buttonTint="@color/yellow"
+        android:text="Веганство"
+        android:textSize="20sp"
+        android:textColor="#606267"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHveget" />
+
+    <CheckBox
+        android:id="@+id/CHadditives"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:buttonTint="@color/yellow"
+        android:text="Показывать пищевые добавки"
+        android:textColor="#606267"
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.244"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHvegan" />
+
+    <Button
+        android:id="@+id/del"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/green"
+        android:text="Сохранить"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHadditives"
+        app:layout_constraintVertical_bias="0.693" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

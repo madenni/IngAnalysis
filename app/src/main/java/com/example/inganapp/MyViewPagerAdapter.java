@@ -22,11 +22,13 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[] { R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3 };
     private final Context mContext;
     private String result, picture;
-    public MyViewPagerAdapter(Context context, FragmentManager fm, String result, String picture) {
+    private int user;
+    public MyViewPagerAdapter(Context context, FragmentManager fm, String result, String picture, int user) {
         super(fm);
         mContext = context;
         this.result = result;
         this.picture = picture;
+        this.user = user;
     }
     @Override
     public Fragment getItem(int position) {
@@ -34,6 +36,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         Bundle bundle = new Bundle();
         bundle.putString("result", result);
         bundle.putString("picture", picture);
+        bundle.putInt("user", user);
         // getItem is called to instantiate the fragment for the given page.
         switch (position) {
             case 0:

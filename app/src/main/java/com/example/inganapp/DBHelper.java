@@ -72,7 +72,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getdata(){
         SQLiteDatabase DB = this.open();
-        Cursor cursor = DB.rawQuery("Select * from Ingredients", null);
+        Cursor cursor = DB.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+                "                FROM Ingredients", null);
         return cursor;
     }
     public Cursor getdata2(String a) {

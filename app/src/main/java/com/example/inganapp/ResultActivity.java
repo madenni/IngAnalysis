@@ -1,8 +1,8 @@
 package com.example.inganapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 public class ResultActivity extends AppCompatActivity
         implements TextResultFragment.SendMessage {
     String result, picture;
+    int user;
     ViewPager viewPager;
 
 
@@ -26,9 +27,10 @@ public class ResultActivity extends AppCompatActivity
         if (extras != null) {
             result = extras.getString("result");
             picture = extras.getString("picture");
+            user = extras.getInt("user");
         }
         MyViewPagerAdapter sectionsPagerAdapter =
-                new MyViewPagerAdapter(this, getSupportFragmentManager(), result, picture);
+                new MyViewPagerAdapter(this, getSupportFragmentManager(), result, picture, user);
         viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -46,11 +48,16 @@ public class ResultActivity extends AppCompatActivity
         }
         viewPager.setCurrentItem(0);
     }
+
+
     @Override
-    public void onBackPressed() {
-
-        startActivity(new Intent(ResultActivity.this,MainActivity.class));
-        finish();
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && viewPager.getCurrentItem() != 0) {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true);
+            return true;
+        } else {
+            System.out.println("else worked");
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }

@@ -90,43 +90,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
-
+        System.out.println("Menu menu = navigationView.getMenu(); ");
         // find MenuItem you want to change
         MenuItem nav_1 = menu.findItem(R.id.nav_1);
         MenuItem nav_2 = menu.findItem(R.id.nav_2);
         MenuItem nav_3 = menu.findItem(R.id.nav_3);
         MenuItem nav_4 = menu.findItem(R.id.nav_4);
         MenuItem nav_5 = menu.findItem(R.id.nav_5);
-
+        System.out.println("MenuItem nav_5 = menu.findItem(R.id.nav_5); ");
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav,
                 R.string.close_nav);
+        System.out.println("ActionBarDrawerToggle toggle ");
         drawerLayout.addDrawerListener(toggle);
+        System.out.println("drawerLayout.addDrawerListener(toggle); ");
         toggle.syncState();
+        System.out.println("toggle.syncState(); ");
         view = findViewById(R.id.btnView);
         rec = findViewById(R.id.btnRec);
         TextView text = findViewById(R.id.text1);
 
         progressOcr = findViewById(R.id.progressBar);
+
+        if (!PermissionUtils.hasPermissions(MainActivity.this)) {
+        PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);}
+        System.out.println("PermissionUtils.requestPermissions ");
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions();
+        }
+        System.out.println("requestPermissions(); ");
+
         //DB = new DBHelper(this);
         DB = new DBHelper(this);
         DB.create_db();
         sql = DB.open();
+        System.out.println("sql = DB.open(); ");
         cursor = sql.rawQuery("SELECT _id, Name FROM Users", null);
+        System.out.println("SELECT _id, Name FROM Users ");
+        if (cursor.getCount() == 0){
+            Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+            startActivity(intent);
 
-
-        if(cursor.getCount()==0){
-            Toast.makeText(this, "No entry exists", Toast.LENGTH_SHORT).show();
-
-        }
-        else {
+        }else {
             while (cursor.moveToNext()){
                 id.add(cursor.getString(0));
-                name.add(cursor.getString(1));
-            }
+                name.add(cursor.getString(1));}
+            System.out.println("name " + name.size());
+        }
+        if (savedInstanceState == null) {
+            navigationView.setCheckedItem(R.id.nav_1);
+            toolbarText = (TextView)toolbar.findViewById(R.id.toolbarTextView);
+            nameS = name.get(0);
+            idS = id.get(0);
+            toolbarText.setText(nameS);
+            System.out.println("savedInstanceState == null ");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        switch (id.size()){
+
+        switch (id.size()) {
+            case 0:
+                Intent intent = new Intent(MainActivity.this, AddUserActivity.class);
+                startActivity(intent);
+                break;
             case 1:
                 nav_1.setVisible(true);
                 nav_1.setTitle(name.get(0));
@@ -178,15 +204,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 nav_5.setTitle(name.get(4));
                 break;
         }
-        if (savedInstanceState == null) {
-            navigationView.setCheckedItem(R.id.nav_1);
-            toolbarText = (TextView)toolbar.findViewById(R.id.toolbarTextView);
-            nameS = name.get(0);
-            idS = id.get(0);
-            toolbarText.setText(nameS);
 
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+
+
+
+
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,12 +232,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .start();
             }
         });
-        if (PermissionUtils.hasPermissions(MainActivity.this)) return;
-        PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions();
-        }
+
 
 
 
@@ -222,38 +241,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_1:
-                nameS = name.get(0);
-                idS = id.get(0);
-                navigationView.setCheckedItem(R.id.nav_1);
-                break;
-            case R.id.nav_2:
-                nameS = name.get(1);
-                idS = id.get(1);
-                navigationView.setCheckedItem(R.id.nav_2);
-                break;
-            case R.id.nav_3:
-                nameS = name.get(2);
-                idS = id.get(2);
-                navigationView.setCheckedItem(R.id.nav_3);
-                break;
-            case R.id.nav_4:
-                nameS = name.get(3);
-                idS = id.get(3);
-                navigationView.setCheckedItem(R.id.nav_4);
-                break;
-            case R.id.nav_5:
-                nameS = name.get(4);
-                idS = id.get(4);
-                navigationView.setCheckedItem(R.id.nav_5);
-                break;
-            case R.id.nav_user:
-                Intent intent = new Intent(this, UserActivity.class);
-                intent.putExtra("user", Integer.parseInt(idS));
+        try {
+            switch (item.getItemId()) {
+                case R.id.nav_1:
+                    nameS = name.get(0);
+                    idS = id.get(0);
+                    navigationView.setCheckedItem(R.id.nav_1);
+                    break;
+                case R.id.nav_2:
+                    nameS = name.get(1);
+                    idS = id.get(1);
+                    navigationView.setCheckedItem(R.id.nav_2);
+                    break;
+                case R.id.nav_3:
+                    nameS = name.get(2);
+                    idS = id.get(2);
+                    navigationView.setCheckedItem(R.id.nav_3);
+                    break;
+                case R.id.nav_4:
+                    nameS = name.get(3);
+                    idS = id.get(3);
+                    navigationView.setCheckedItem(R.id.nav_4);
+                    break;
+                case R.id.nav_5:
+                    nameS = name.get(4);
+                    idS = id.get(4);
+                    navigationView.setCheckedItem(R.id.nav_5);
+                    break;
+                case R.id.nav_user:
+                    Intent intent = new Intent(this, UserActivity.class);
+                    intent.putExtra("user", Integer.parseInt(idS));
 
-                startActivity(intent);
-                break;
+                    startActivity(intent);
+                    break;
+                case R.id.nav_new:
+                    if (id.size() < 5) {
+                        Intent intent2 = new Intent(this, AddUserActivity.class);
+                        startActivity(intent2);
+                        finish();
+                    } else
+                        Toast.makeText(this, "Добавлено слишком много пользователей", Toast.LENGTH_SHORT).show();
+                    break;
+
+
+            }
+        } catch(Exception e){
+            Log.i(TAG,"didnt work at all");
         }
         toolbarText.setText(nameS);
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -281,6 +314,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

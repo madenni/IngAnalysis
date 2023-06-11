@@ -13,13 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.inganapp.AddUserActivity;
 import com.example.inganapp.DBHelper;
 import com.example.inganapp.MainActivity;
 import com.example.inganapp.R;
@@ -32,7 +32,7 @@ public class HabitsFragment extends Fragment {
     DBHelper DB;
     Cursor cursor;
     SQLiteDatabase sql;
-    ImageButton save;
+    Button save;
     Button del;
     public static HabitsFragment newInstance() {
         return new HabitsFragment();
@@ -70,6 +70,7 @@ public class HabitsFragment extends Fragment {
     }
     public void onResume() {
         super.onResume();
+
         try {
             DB = new DBHelper(this.getContext());
             sql = DB.open();
@@ -142,9 +143,18 @@ public class HabitsFragment extends Fragment {
                         sql.delete("Users", "_id = ?", new String[]{String.valueOf(userID)});
                         sql.close();
                         // переход к главной activity
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        startActivity(intent);
-                        dialog.dismiss();
+                        try {
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            startActivity(intent);
+                            dialog.dismiss();
+
+                        } catch(Exception e){
+                            Intent intent = new Intent(getContext(), AddUserActivity.class);
+                            startActivity(intent);
+                            dialog.dismiss();
+                        }
+
+
                     }
 
                 })
@@ -159,4 +169,5 @@ public class HabitsFragment extends Fragment {
 
         return myQuittingDialogBox;
     }
+
 }

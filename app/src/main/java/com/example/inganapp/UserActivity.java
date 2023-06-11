@@ -49,9 +49,12 @@ public class UserActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        startActivity(new Intent(UserActivity.this,MainActivity.class));
-        finish();
-
+        try {
+            startActivity(new Intent(UserActivity.this, MainActivity.class));
+            finish();
+        } catch(Exception e){
+            startActivity(new Intent(UserActivity.this, AddUserActivity.class));
+            finish();
+        }
     }
 }

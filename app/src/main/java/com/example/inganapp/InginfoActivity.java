@@ -47,7 +47,7 @@ public class InginfoActivity extends AppCompatActivity {
                 DB.COLUMN_ID + "=?", new String[]{Id});
         cursor.moveToFirst();
         nameBox.setText(cursor.getString(1));
-        //descr.setText(cursor.getString(2));
+        descr.setText(cursor.getString(2));
         if (cursor.getInt(3) == 1 ){
             dia.setText("осторожно при диабете");
             dia.setBackgroundResource(R.color.red);
@@ -87,8 +87,14 @@ public class InginfoActivity extends AppCompatActivity {
         cursor.moveToFirst();
         if(cursor!=null && cursor.getCount()>0){
             check.setChecked(true);
-        } else check.setChecked(false);
-        descr.setText(String.valueOf(userID));
+            check.setText("Добавлено в список");
+            check.setTextColor(getResources().getColor(R.color.green));
+        } else {
+            check.setChecked(false);
+            check.setText("Добавить в список");
+            check.setTextColor(getResources().getColor(R.color.black_shade_1));
+        }
+
 
 
 
@@ -100,10 +106,18 @@ public class InginfoActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    check.setText("Добавлено в список");
+                    check.setTextColor(getResources().getColor(R.color.green));
                     cv.put("idI", Integer.parseInt(Id));
                     cv.put("idU", userID);
                     sql.insert("Custom",null, cv);
-                } else sql.delete("Custom", "idI = " + Integer.parseInt(Id) + " AND " + userID, null);
+                } else {
+                    sql.delete("Custom", "idI = " + Integer.parseInt(Id) + " AND " + userID, null);
+                    check.setText("Добавить в список");
+                    check.setTextColor(getResources().getColor(R.color.black_shade_1));
+
+
+                }
                 Toast.makeText(InginfoActivity.this, "Изменения сохранены!", Toast.LENGTH_SHORT).show();
             }
         });

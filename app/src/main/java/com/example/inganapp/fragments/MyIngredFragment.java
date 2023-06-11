@@ -3,6 +3,7 @@ package com.example.inganapp.fragments;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +28,15 @@ import java.util.ArrayList;
 public class MyIngredFragment extends Fragment implements RecyclerViewInterface {
     int userID;
     ArrayList<String> name;
-    ArrayList<String> id;
+    ArrayList<String> id, idWRN;
     ArrayList<String> infos;
     ArrayList<String> wrn;
     RecyclerView recyclerView;
     DBHelper DB;
     MyAdapter adapter;
     TextView text;
+    Cursor cursorwrn;
+    SQLiteDatabase sql;
     public static MyIngredFragment newInstance() {
             return new MyIngredFragment();
         }
@@ -72,6 +75,7 @@ public class MyIngredFragment extends Fragment implements RecyclerViewInterface 
         text = view.findViewById(R.id.textView);
 
 
+
     }
     public void onResume() {
         super.onResume();
@@ -79,8 +83,23 @@ public class MyIngredFragment extends Fragment implements RecyclerViewInterface 
             name = new ArrayList<>();
             id = new ArrayList<>();
             wrn = new ArrayList<>();
+            idWRN = new ArrayList<>();
             DB = new DBHelper(this.getContext());
             DB.create_db();
+
+            sql = DB.open();
+            cursorwrn = sql.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+                    "                FROM Users, Ingredients \n" +
+                    "               WHERE (Users._id = " + userID + " AND ((Ingredients.diabetes = Users.diabetes AND Users.diabetes = 1) OR " +
+                    "(Ingredients.nonveget = Users.veget AND Users.veget = 1) OR (Ingredients.nonvegan = Users.vegan AND Users.vegan = 1) OR " +
+                    "(Ingredients.allergy = Users.allergy AND Users.allergy = 1) OR (Ingredients.additives = Users.additives AND Users.additives = 1))) \n" +
+                    "\t\t\t   UNION \n" +
+                    "\t\t\t   SELECT DISTINCT Ingredients.* \n" +
+                    "                FROM Custom, Ingredients \n" +
+                    "               WHERE  (Custom.idU = " + userID + " AND Custom.idI = Ingredients._id) ", null);
+            while (cursorwrn.moveToNext()){
+                idWRN.add(cursorwrn.getString(0));
+            }
             adapter = new MyAdapter(this.getContext(), name, id,wrn, this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -102,12 +121,15 @@ public class MyIngredFragment extends Fragment implements RecyclerViewInterface 
             while (cursor.moveToNext()){
                 id.add(cursor.getString(0));
                 name.add(cursor.getString(1));
-                wrn.add(cursor.getString(6));
+            }
+            for (int i=0; i< id.size(); i++){
+                if (idWRN.contains(id.get(i))){
+                    wrn.add(i,"1");
+                } else {wrn.add(i,"0");}
 
             }
             text.setText("Найдено ингредиентов: " + id.size());
-        }
-    }
+    }}
     @Override
     public void OnItemClick(int position) {
         Intent intent = new Intent(this.getContext(), InginfoActivity.class);
@@ -115,6 +137,7 @@ public class MyIngredFragment extends Fragment implements RecyclerViewInterface 
         infos = adapter.getId_id();
         String info = (String) infos.get(position);
         intent.putExtra("id", info);
+        intent.putExtra("user", userID);
 
         startActivity(intent);
 

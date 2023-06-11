@@ -19,12 +19,12 @@ import java.util.ArrayList;
 public class IngredlistActivity extends AppCompatActivity implements RecyclerViewInterface{
     RecyclerView recyclerView;
     ArrayList<String> name;
-    ArrayList<String> id;
+    ArrayList<String> id, idWRN;
     ArrayList<String> infos;
     ArrayList<String> wrn;
     DBHelper DB;
     MyAdapter adapter;
-    Cursor cursor;
+    Cursor cursor, cursorwrn;
     EditText filter;
     SQLiteDatabase sql;
     int user;
@@ -39,15 +39,57 @@ public class IngredlistActivity extends AppCompatActivity implements RecyclerVie
             user = extras.getInt("user");
 
         }
-        DB = new DBHelper(this);
-
-        sql = DB.open();
-        cursor = sql.rawQuery("SELECT * FROM Users", null);
+        System.out.println(user);
         name = new ArrayList<>();
         id = new ArrayList<>();
+        idWRN = new ArrayList<>();
         wrn = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerview);
         filter = findViewById(R.id.filter);
+        //DB = new DBHelper(this);
+        //sql = DB.open();
+        //cursorwrn = sql.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+          //      " FROM Users, Ingredients, Custom\n " +
+            //    " WHERE (Users._id = "+ user + " AND ((Ingredients.diabetes = Users.diabetes AND Users.diabetes = 1) " +
+              //  " OR (Ingredients.nonveget = Users.veget AND Users.veget = 1) OR (Ingredients.nonvegan = Users.vegan AND Users.vegan = 1) " +
+                //" OR (Ingredients.allergy = Users.allergy AND Users.allergy = 1) OR (Ingredients.additives = Users.additives AND Users.additives = 1)))  " +
+                //" OR (Custom.idU = " + user + " AND Custom.idI = Ingredients._id) ", null);
+        //while (cursorwrn.moveToNext()){
+          //  idWRN.add(cursorwrn.getString(0));
+        //}
+        DB = new DBHelper(this);
+        sql = DB.open();
+        cursorwrn = sql.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+                "                FROM Users, Ingredients \n" +
+                "               WHERE (Users._id = " + user + " AND ((Ingredients.diabetes = Users.diabetes AND Users.diabetes = 1) OR " +
+                "(Ingredients.nonveget = Users.veget AND Users.veget = 1) OR (Ingredients.nonvegan = Users.vegan AND Users.vegan = 1) OR " +
+                "(Ingredients.allergy = Users.allergy AND Users.allergy = 1) OR (Ingredients.additives = Users.additives AND Users.additives = 1))) \n" +
+                "\t\t\t   UNION \n" +
+                "\t\t\t   SELECT DISTINCT Ingredients.* \n" +
+                "                FROM Custom, Ingredients \n" +
+                "               WHERE  (Custom.idU = " + user + " AND Custom.idI = Ingredients._id) ", null);
+        while (cursorwrn.moveToNext()){
+            idWRN.add(cursorwrn.getString(0));
+        }
+        adapter = new MyAdapter(this, name, id,wrn, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        displaydata();
+
+        filter.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) { }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            // при изменении текста выполняем фильтрацию
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                filterM(s.toString());
+            }
+        });
+
+
+
 
     }
 
@@ -57,6 +99,17 @@ public class IngredlistActivity extends AppCompatActivity implements RecyclerVie
             name = new ArrayList<>();
             id = new ArrayList<>();
             wrn = new ArrayList<>();
+            DB = new DBHelper(this);
+            sql = DB.open();
+            cursorwrn = sql.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+                    " FROM Users, Ingredients, Custom\n " +
+                    " WHERE (Users._id = "+ user + " AND ((Ingredients.diabetes = Users.diabetes AND Users.diabetes = 1) " +
+                    " OR (Ingredients.nonveget = Users.veget AND Users.veget = 1) OR (Ingredients.nonvegan = Users.vegan AND Users.vegan = 1) " +
+                    " OR (Ingredients.allergy = Users.allergy AND Users.allergy = 1) OR (Ingredients.additives = Users.additives AND Users.additives = 1)))  " +
+                    " OR (Custom.idU = " + user + " AND Custom.idI = Ingredients._id) ", null);
+            while (cursorwrn.moveToNext()){
+                idWRN.add(cursorwrn.getString(0));
+            }
             adapter = new MyAdapter(this, name, id,wrn, this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,8 +143,13 @@ public class IngredlistActivity extends AppCompatActivity implements RecyclerVie
             while (cursor.moveToNext()){
                 id.add(cursor.getString(0));
                 name.add(cursor.getString(1));
-                wrn.add(cursor.getString(6));
 
+            }
+            for (int i=0; i< id.size(); i++){
+                if (idWRN.contains(id.get(i))){
+                    wrn.add(i,"1");
+                } else {wrn.add(i,"0");
+                    System.out.println("list from comma separated String : " + idWRN);}
             }
         }
     }
