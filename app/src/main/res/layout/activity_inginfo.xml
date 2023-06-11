@@ -36,7 +36,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.654"
@@ -52,8 +52,8 @@
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.114"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/nonvegan"
         app:layout_constraintTop_toBottomOf="@+id/nonvegan"
         tools:visibility="visible" />
 
@@ -67,8 +67,8 @@
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.124"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/nonveget"
         app:layout_constraintTop_toBottomOf="@+id/nonveget"
         tools:visibility="visible" />
 
@@ -82,8 +82,8 @@
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.122"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/diabetes"
         app:layout_constraintTop_toBottomOf="@+id/diabetes"
         tools:visibility="visible" />
 
@@ -97,25 +97,24 @@
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/allergy"
         app:layout_constraintTop_toBottomOf="@+id/allergy"
         tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="373dp"
-        android:layout_height="258dp"
+        android:layout_width="341dp"
+        android:layout_height="297dp"
         android:fontFamily="sans-serif"
         android:text="TextView"
         android:textSize="18sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.198" />
+        app:layout_constraintVertical_bias="0.281" />
 
     <CheckBox
         android:id="@+id/checkBox"
