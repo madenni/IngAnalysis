@@ -241,6 +241,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         try {
