@@ -1,14 +1,11 @@
 package com.example.inganapp;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +20,8 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String TABLE = "Ingredients";
     static final String COLUMN_ID = "_id";
     static final String COLUMN_NAME = "Name";
+    static final String COLUMN_SYN = "Synonyms";
+
 
 
     public DBHelper(Context context) {
@@ -42,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //DB.execSQL("drop Table if exists Userdetails");
     }
 
-    void create_db(){
+    public void create_db(){
 
         File file = new File(DB_PATH);
         if (!file.exists()) {
@@ -73,7 +72,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getdata(){
         SQLiteDatabase DB = this.open();
-        Cursor cursor = DB.rawQuery("Select * from Ingredients", null);
+        Cursor cursor = DB.rawQuery("SELECT DISTINCT Ingredients.* \n" +
+                "                FROM Ingredients", null);
+        return cursor;
+    }
+    public Cursor getdata2(String a) {
+        SQLiteDatabase DB = this.open();
+        Cursor cursor = null;
+        cursor = DB.rawQuery("select Ingredients.* from " + TABLE + " where Synonyms like " +"'%" + a + "%'", null);
+        System.out.println("ingredient name: " + a);
+        return cursor;
+    }
+    public Cursor getdata3(int a) {
+        SQLiteDatabase DB = this.open();
+        Cursor cursor = null;
+        cursor = DB.rawQuery("SELECT Ingredients.*\n" +
+                "FROM Custom, Ingredients\n" +
+                "WHERE Custom.idU = ? AND Custom.idI = Ingredients._id", new String[]{String.valueOf(a)});
+
         return cursor;
     }
 }
