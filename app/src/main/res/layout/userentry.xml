@@ -48,11 +48,11 @@
             <ImageView
                 android:id="@+id/imageView"
 
-                android:layout_width="57dp"
+                android:layout_width="54dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="60dp"
                 android:visibility="visible"
                 app:srcCompat="?android:attr/alertDialogIcon" />
 
